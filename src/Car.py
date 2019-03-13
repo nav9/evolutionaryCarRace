@@ -3,20 +3,45 @@
 ### License: Proprietary. No form of this shall be shared or copied in any form without the explicit permission of the author
 
 from pymunk import Vec2d
+#import numpy as np
+import random
 
 class Car:
     space = []
     physics = []
     x = 0
     y = 0
-    speed = 15
-    friction = 1.5
+    friction = 1.5    
+    speed_range = range(10, 30, 5)#15
+    chWd_range = range(5, 70, 5)#50#chassis width
+    chHt_range = range(5, 50, 5)#10#chassis height
+    wheel1Radius_range = range(5, 25, 5)#15 
+    wheel2Radius_range = range(5, 25, 5)#15 
+    chassisMass_range = range(10, 500, 50)#100
+    wheel1Mass_range = range(10, 500, 50)#100
+    wheel2Mass_range = range(10, 500, 50)#100    
+    speed = 0
+    chWd = 0#chassis width
+    chHt = 0#chassis height
+    wheel1Radius = 0 
+    wheel2Radius = 0
+    chassisMass = 0
+    wheel1Mass = 0
+    wheel2Mass = 0        
     
     def __init__(self, space, physics, xOffset, yOffset):
         self.space = space
         self.physics = physics
         self.x = xOffset
         self.y = yOffset
+        self.speed = random.choice(self.speed_range)
+        self.chWd = random.choice(self.chWd_range)
+        self.chHt = random.choice(self.chHt_range)
+        self.wheel1Radius = random.choice(self.wheel1Radius_range)
+        self.wheel2Radius = random.choice(self.wheel2Radius_range)
+        self.chassisMass = random.choice(self.chassisMass_range)
+        self.wheel1Mass = random.choice(self.wheel1Mass_range)
+        self.wheel2Mass = random.choice(self.wheel2Mass_range)        
         
     def addWheel(self, centerPoint, xOffset, yOffset, mass, radius):
         moment = self.physics.moment_for_circle(mass, 0, radius)
@@ -39,16 +64,16 @@ class Car:
         
     def createCar(self):
         chassisXY = Vec2d(self.x, self.y)
-        chWd = 50#chassis width
-        chHt = 10#chassis height
-        wheelRadius = 15; mass = 100
-        ch = self.addChassis(chassisXY, 0, 0, mass, chWd, chHt)
-        w1 = self.addChassis(chassisXY, -chWd, 0, mass, 5, 30) #self.addWheel(chassisXY, chWd, 0, mass, wheelRadius)
-        w2 = self.addWheel(chassisXY, -chWd, 0, mass, wheelRadius)
+        ch = self.addChassis(chassisXY, 0, 0, self.chassisMass, self.chWd, self.chHt)
+        #w1 = self.addChassis(chassisXY, -chWd, 0, mass, 5, 30) #special rectangular wheel
+        w1 = self.addWheel(chassisXY, self.chWd, 0, self.wheel1Mass, self.wheel1Radius)
+        w2 = self.addWheel(chassisXY, -self.chWd, 0, self.wheel2Mass, self.wheel2Radius)
 
-        self.space.add(self.physics.PinJoint(w1, ch, (0,0), (-chWd/2,0)), 
-                       self.physics.PinJoint(w2, ch, (0,0), (chWd/2,0)),
-                       self.physics.PinJoint(w1, ch, (0,0), (0,-chHt/2)), 
-                       self.physics.PinJoint(w2, ch, (0,0), (0,-chHt/2)))                     
-        self.space.add(self.physics.SimpleMotor(w1, ch, self.speed), self.physics.SimpleMotor(w2, ch, self.speed))
+        self.space.add(self.physics.PinJoint(w1, ch, (0,0), (-self.chWd/2,0)), 
+                       self.physics.PinJoint(w2, ch, (0,0), (self.chWd/2,0)),
+                       self.physics.PinJoint(w1, ch, (0,0), (0,-self.chHt/2)), 
+                       self.physics.PinJoint(w2, ch, (0,0), (0,-self.chHt/2)))  
+        motorJoint1 = self.physics.SimpleMotor(w1, ch, self.speed); motorJoint1.max_force = 10000000
+        motorJoint2 = self.physics.SimpleMotor(w2, ch, self.speed); motorJoint2.max_force = 10000000
+        self.space.add(motorJoint1, motorJoint2)
         
