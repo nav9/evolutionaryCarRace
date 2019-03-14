@@ -77,3 +77,8 @@ class Car:
         motorJoint2 = self.physics.SimpleMotor(w2, ch, self.speed); motorJoint2.max_force = 10000000
         self.space.add(motorJoint1, motorJoint2)
         
+    def removeCar(self):
+        self.space.remove(motorJoint1)
+        self.space.remove(motorJoint2)
+        self.space.remove(motorJoint1)
+        

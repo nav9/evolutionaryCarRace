@@ -17,7 +17,7 @@ from Car import Car
 class Scene:
     fps = 60.0
     worldWidth = 1224
-    worldHeight = 700
+    worldHeight = 710
     gravity = 900
     sleepTimeThreshold = 0.3
     space = []
@@ -43,8 +43,8 @@ class Scene:
         self.physics.pygame_util.positive_y_is_up = False
         
         #---add tracks
-        numCars = 3
-        x = 20; yPos = 140; trackGap = 230; 
+        numCars = 4
+        x = 20; yPos = 100; trackGap = 190; 
         trackPositions = []  
         for y in range(numCars):
             trackPositions.append(yPos)
