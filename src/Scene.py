@@ -8,6 +8,7 @@ from random import uniform
 
 import pygame
 from pygame.locals import *
+from pygame.color import *
 
 import pymunk
 import pymunk.pygame_util
@@ -18,10 +19,12 @@ from Car import Car
 
 class Scene:
     fps = 60.0
+    font = []
     worldWidth = 1224
     worldHeight = 710
     gravity = 900
-    generations = 40
+    generations = 500
+    allTimeBestFit = 0
     numCars = 4
     trackX = 20 
     trackY = 100
@@ -48,6 +51,7 @@ class Scene:
         self.game.init()
         self.screen = self.game.display.set_mode((self.worldWidth, self.worldHeight))
         self.clock = self.game.time.Clock() 
+        self.font = pygame.font.SysFont("Arial", 20)
         #--- Physics
         self.space = self.physics.Space() 
         self.space.gravity = 0, self.gravity
@@ -95,6 +99,13 @@ class Scene:
                 for b in self.popu:
                     b.updateFitness()
                 #---scene
+                bestFit = 0
+                for b in self.popu:
+                    if b.getFitness() > bestFit:
+                        bestFit = b.getFitness(); 
+                    if b.getFitness() > self.allTimeBestFit:    
+                        self.allTimeBestFit = b.getFitness()
+                self.screen.blit(self.font.render("Generation: "+str(g)+".   Time remaining: "+str(int(self.timeToTry-total_time))+".   Best fitness now: "+str(int(bestFit))+".   All time best fitness: "+str(int(self.allTimeBestFit)), 1, THECOLORS["darkgrey"]), (5, 5))
                 self.game.display.flip()
                 dt = self.clock.tick(self.fps)#creates a delay
                 total_time += dt/1000.
@@ -113,9 +124,7 @@ class Scene:
             
             bestFitnessThisGen = max(fit)
             fittestCar = fit.index(bestFitnessThisGen)
-            print('generation -----------------');print(g)
-            print('fitness values');print(fit)
-            print('fittestCar');print(fittestCar)
+            leastFitCar = fit.index(min(fit))
             for b in range(len(self.popu)):
                 sel = []
                 for s in oldSel:
@@ -143,7 +152,7 @@ class Scene:
                         if uniform(0,1) <= self.crProba:
                             mutant[i] = prev[i]
                     self.popu[b].setValues(mutant) 
-            
+                self.popu[leastFitCar].reinitializeWithRandomValues()
             
             #---beta is reduced to encourage exploitation and reduce exploration
             if self.vBeta > 1/40: 
