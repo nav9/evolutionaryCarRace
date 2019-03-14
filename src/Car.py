@@ -3,7 +3,6 @@
 ### License: Proprietary. No form of this shall be shared or copied in any form without the explicit permission of the author
 
 from pymunk import Vec2d
-#import numpy as np
 import random
 
 class Car:

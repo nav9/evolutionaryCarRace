@@ -4,6 +4,7 @@
 
 import sys
 import random
+from random import uniform
 
 import pygame
 from pygame.locals import *
@@ -131,13 +132,16 @@ class Scene:
                 x1 = self.popu[x1].getValues()
                 x2 = self.popu[x2].getValues()
                 x3 = self.popu[x3].getValues()
-                prev = self.popu[b]
+                prev = self.popu[b].getValues()
                 for i in range(len(x1)):
                     mutant.append(x1[i] + round(self.vBeta * (x2[i] - x3[i])))
                 if mutant == prev:
                     self.popu[b].reinitializeWithRandomValues()
                 else:
                     #---crossover
+                    for i in range(len(prev)):
+                        if uniform(0,1) <= self.crProba:
+                            mutant[i] = prev[i]
                     self.popu[b].setValues(mutant) 
             
             
