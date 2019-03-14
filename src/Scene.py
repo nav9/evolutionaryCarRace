@@ -25,6 +25,7 @@ class Scene:
     gravity = 900
     generations = 500
     allTimeBestFit = 0
+    allTimeBestFitGen = 0
     numCars = 4
     trackX = 20 
     trackY = 100
@@ -104,8 +105,8 @@ class Scene:
                     if b.getFitness() > bestFit:
                         bestFit = b.getFitness(); 
                     if b.getFitness() > self.allTimeBestFit:    
-                        self.allTimeBestFit = b.getFitness()
-                self.screen.blit(self.font.render("Generation: "+str(g)+".   Time remaining: "+str(int(self.timeToTry-total_time))+".   Best fitness now: "+str(int(bestFit))+".   All time best fitness: "+str(int(self.allTimeBestFit)), 1, THECOLORS["darkgrey"]), (5, 5))
+                        self.allTimeBestFit = b.getFitness(); self.allTimeBestFitGen = g
+                self.screen.blit(self.font.render("Generation: "+str(g)+"/"+str(int(self.generations))+".   Time remaining: "+str(int(self.timeToTry-total_time))+".   Best fitness now: "+str(int(bestFit))+".   All time best fitness: "+str(int(self.allTimeBestFit))+" in gen "+str(int(self.allTimeBestFitGen)), 1, THECOLORS["darkgrey"]), (5, 5))
                 self.game.display.flip()
                 dt = self.clock.tick(self.fps)#creates a delay
                 total_time += dt/1000.
