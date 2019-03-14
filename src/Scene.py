@@ -3,6 +3,7 @@
 ### License: Proprietary. No form of this shall be shared or copied in any form without the explicit permission of the author
 
 import sys
+import random
 
 import pygame
 from pygame.locals import *
@@ -19,7 +20,7 @@ class Scene:
     worldWidth = 1224
     worldHeight = 710
     gravity = 900
-    generations = 10
+    generations = 40
     numCars = 4
     trackX = 20 
     trackY = 100
@@ -34,8 +35,13 @@ class Scene:
     clock = []
     tracks = []
     popu = []
+    #---Differential Evolution parameters
+    masterBeta = 2.0#beta is real number belongs to [0 -> 2]
+    vBeta = 0#variable beta
+    crProba = 0.3#crossover probability range [0 -> 1]
     
     def __init__(self):
+        self.vBeta = self.masterBeta
         self.game = pygame
         self.physics = pymunk;
         self.game.init()
@@ -65,11 +71,12 @@ class Scene:
             car.setEndOfTrackAsMaxFitness(endOfTrack)            
             self.popu.append(car)
         
-    def runLoop(self):        
+    def runLoop(self):
         for g in range(1, self.generations):
             #---car updations
             for b in self.popu:
                 b.createCar()
+                #b.reinitializeWithRandomValues()
             total_time = 0
             while True:
                 for event in pygame.event.get():
@@ -96,4 +103,44 @@ class Scene:
                     for b in self.popu:
                         b.removeCar()
                     break
-                    
+            #---Differential Evolution
+            fit = []; oldSel = []; sel = []; i = 0
+            for b in self.popu:
+                fit.append(b.getFitness())
+                sel.append(i); oldSel.append(i)
+                i = i + 1
+            
+            bestFitnessThisGen = max(fit)
+            fittestCar = fit.index(bestFitnessThisGen)
+            print('generation -----------------');print(g)
+            print('fitness values');print(fit)
+            print('fittestCar');print(fittestCar)
+            for b in range(len(self.popu)):
+                sel = []
+                for s in oldSel:
+                    sel.append(s)
+                
+                if b == fittestCar:#don't mess with the fittest
+                    continue
+                del sel[b]
+                #---randomly choose three others for DE
+                x1 = random.choice(sel); sel.remove(x1)
+                x2 = random.choice(sel); sel.remove(x2)
+                x3 = random.choice(sel); sel.remove(x3)
+                mutant = []
+                x1 = self.popu[x1].getValues()
+                x2 = self.popu[x2].getValues()
+                x3 = self.popu[x3].getValues()
+                prev = self.popu[b]
+                for i in range(len(x1)):
+                    mutant.append(x1[i] + round(self.vBeta * (x2[i] - x3[i])))
+                if mutant == prev:
+                    self.popu[b].reinitializeWithRandomValues()
+                else:
+                    #---crossover
+                    self.popu[b].setValues(mutant) 
+            
+            
+            #---beta is reduced to encourage exploitation and reduce exploration
+            if self.vBeta > 1/40: 
+                self.vBeta = self.vBeta - 1/40

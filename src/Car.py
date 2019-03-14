@@ -23,8 +23,8 @@ class Car:
     wheel2Mass_range = range(10, 500, 50)#100  
     #---column of end of track
     maxFitness = 0
-    #---properties of car
     fitness = 0
+    #---properties of car    
     speed = 0
     chWd = 0#chassis width
     chHt = 0#chassis height
@@ -62,14 +62,49 @@ class Car:
         self.wheel2Radius = random.choice(self.wheel2Radius_range)
         self.chassisMass = random.choice(self.chassisMass_range)
         self.wheel1Mass = random.choice(self.wheel1Mass_range)
-        self.wheel2Mass = random.choice(self.wheel2Mass_range)                  
+        self.wheel2Mass = random.choice(self.wheel2Mass_range)     
+    
+    def getValues(self):
+        v = []
+        v.append(self.speed); v.append(self.chWd)
+        v.append(self.chHt); v.append(self.wheel1Radius)
+        v.append(self.wheel2Radius); v.append(self.chassisMass)
+        v.append(self.wheel1Mass); v.append(self.wheel2Mass)
+        return v
+        
+    def setValues(self, v):
+        i = 0
+        self.speed = v[i]; i = i + 1
+        if self.speed < self.speed_range[0] or self.speed > self.speed_range[-1]:
+            self.speed = random.choice(self.speed_range)
+        self.chWd = v[i]; i = i + 1
+        if self.chWd < self.chWd_range[0] or self.chWd > self.chWd_range[-1]:
+            self.chWd = random.choice(self.chWd_range)        
+        self.chHt = v[i]; i = i + 1
+        if self.chHt < self.chHt_range[0] or self.chHt > self.chHt_range[-1]:
+            self.chHt = random.choice(self.chHt_range)        
+        self.wheel1Radius = v[i]; i = i + 1
+        if self.wheel1Radius < self.wheel1Radius_range[0] or self.wheel1Radius > self.wheel1Radius_range[-1]:
+            self.wheel1Radius = random.choice(self.wheel1Radius_range)        
+        self.wheel2Radius = v[i]; i = i + 1
+        if self.wheel2Radius < self.wheel2Radius_range[0] or self.wheel2Radius > self.wheel2Radius_range[-1]:
+            self.wheel2Radius = random.choice(self.wheel2Radius_range)        
+        self.chassisMass = v[i]; i = i + 1
+        if self.chassisMass < self.chassisMass_range[0] or self.chassisMass > self.chassisMass_range[-1]:
+            self.chassisMass = random.choice(self.chassisMass_range)        
+        self.wheel1Mass = v[i]; i = i + 1
+        if self.wheel1Mass < self.wheel1Mass_range[0] or self.wheel1Mass > self.wheel1Mass_range[-1]:
+            self.wheel1Mass = random.choice(self.wheel1Mass_range)        
+        self.wheel2Mass = v[i]; i = i + 1
+        if self.wheel2Mass < self.wheel2Mass_range[0] or self.wheel2Mass > self.wheel2Mass_range[-1]:
+            self.wheel2Mass = random.choice(self.wheel2Mass_range)        
     
     def setEndOfTrackAsMaxFitness(self, endOfTrack):
         self.maxFitness = endOfTrack
         
     def createCar(self):
         chassisXY = Vec2d(self.x, self.y)
-        
+        self.fitness = 0
         moment = self.physics.moment_for_box(self.chassisMass, (self.chWd, self.chHt))
         self.chassis_b = self.physics.Body(self.chassisMass, moment)
         self.chassis_s = self.physics.Poly.create_box(self.chassis_b, (self.chWd, self.chHt))
@@ -121,10 +156,12 @@ class Car:
         self.space.remove(self.motorJoint2)
 
     def updateFitness(self):
-        if self.wheel2_b.position.x > self.fitness:
-            self.fitness = self.wheel2_b.position.x
+        if self.chassis_b.position.x > self.fitness:
+            self.fitness = self.chassis_b.position.x
         if self.fitness > self.maxFitness:
             self.fitness = self.maxFitness
-        
+    
+    def getFitness(self):
+        return self.fitness
             
    
