@@ -36,7 +36,13 @@ class Car:
     wheel1_b = []
     wheel1_s = []
     wheel2_b = []
-    wheel2_s = []    
+    wheel2_s = []  
+    pin1 = []
+    pin2 = []
+    pin3 = []
+    pin4 = []
+    motorJoint1 = []
+    motorJoint2 = []
     
     def __init__(self, space, physics, xOffset, yOffset):
         self.space = space
@@ -54,17 +60,6 @@ class Car:
         self.chassisMass = random.choice(self.chassisMass_range)
         self.wheel1Mass = random.choice(self.wheel1Mass_range)
         self.wheel2Mass = random.choice(self.wheel2Mass_range)                  
-        
-    def addWheel(self, centerPoint, xOffset, yOffset, mass, radius):
-        moment = self.physics.moment_for_circle(mass, 0, radius)
-        wheel_b = self.physics.Body(mass, moment)
-        wheel_s = self.physics.Circle(wheel_b, radius)
-        wheel_s.friction = self.friction
-        #wheel_s.color = 52,219,119
-        wheel_b.position = centerPoint - (xOffset, yOffset)
-        self.space.add(wheel_b, wheel_s)   
-        return wheel_b
-        
         
     def createCar(self):
         chassisXY = Vec2d(self.x, self.y)
@@ -96,14 +91,14 @@ class Car:
         self.wheel2_b.position = chassisXY - (-self.chWd, 0)
         self.space.add(self.wheel2_b, self.wheel2_s)         
         
-
-        self.space.add(self.physics.PinJoint(self.wheel1_b, self.chassis_b, (0,0), (-self.chWd/2,0)), 
-                       self.physics.PinJoint(self.wheel2_b, self.chassis_b, (0,0), (self.chWd/2,0)),
-                       self.physics.PinJoint(self.wheel1_b, self.chassis_b, (0,0), (0,-self.chHt/2)), 
-                       self.physics.PinJoint(self.wheel2_b, self.chassis_b, (0,0), (0,-self.chHt/2)))  
-        motorJoint1 = self.physics.SimpleMotor(self.wheel1_b, self.chassis_b, self.speed); motorJoint1.max_force = 10000000
-        motorJoint2 = self.physics.SimpleMotor(self.wheel2_b, self.chassis_b, self.speed); motorJoint2.max_force = 10000000
-        self.space.add(motorJoint1, motorJoint2)
+        self.pin1 = self.physics.PinJoint(self.wheel1_b, self.chassis_b, (0,0), (-self.chWd/2,0))
+        self.pin2 = self.physics.PinJoint(self.wheel2_b, self.chassis_b, (0,0), (self.chWd/2,0))
+        self.pin3 = self.physics.PinJoint(self.wheel1_b, self.chassis_b, (0,0), (0,-self.chHt/2))
+        self.pin4 = self.physics.PinJoint(self.wheel2_b, self.chassis_b, (0,0), (0,-self.chHt/2))
+        self.space.add(self.pin1, self.pin2, self.pin3, self.pin4)
+        self.motorJoint1 = self.physics.SimpleMotor(self.wheel1_b, self.chassis_b, self.speed); self.motorJoint1.max_force = 10000000
+        self.motorJoint2 = self.physics.SimpleMotor(self.wheel2_b, self.chassis_b, self.speed); self.motorJoint2.max_force = 10000000
+        self.space.add(self.motorJoint1, self.motorJoint2)
         
     def removeCar(self):
         self.space.remove(motorJoint1)

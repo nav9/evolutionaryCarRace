@@ -5,7 +5,7 @@
 class Ground:
     x = 0 #col
     y = 0 #row
-    thickness = 1
+    thickness = 2
     friction = 1.0
     
     def __init__(self, xOffset, yOffset):
