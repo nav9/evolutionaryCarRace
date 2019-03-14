@@ -21,7 +21,10 @@ class Car:
     chassisMass_range = range(10, 500, 50)#100
     wheel1Mass_range = range(10, 500, 50)#100
     wheel2Mass_range = range(10, 500, 50)#100  
+    #---column of end of track
+    maxFitness = 0
     #---properties of car
+    fitness = 0
     speed = 0
     chWd = 0#chassis width
     chHt = 0#chassis height
@@ -44,11 +47,11 @@ class Car:
     motorJoint1 = []
     motorJoint2 = []
     
-    def __init__(self, space, physics, xOffset, yOffset):
+    def __init__(self, space, physics, xStartPos, yStartPos):
         self.space = space
         self.physics = physics
-        self.x = xOffset
-        self.y = yOffset
+        self.x = xStartPos
+        self.y = yStartPos
         self.reinitializeWithRandomValues()    
         
     def reinitializeWithRandomValues(self):
@@ -60,6 +63,9 @@ class Car:
         self.chassisMass = random.choice(self.chassisMass_range)
         self.wheel1Mass = random.choice(self.wheel1Mass_range)
         self.wheel2Mass = random.choice(self.wheel2Mass_range)                  
+    
+    def setEndOfTrackAsMaxFitness(self, endOfTrack):
+        self.maxFitness = endOfTrack
         
     def createCar(self):
         chassisXY = Vec2d(self.x, self.y)
@@ -101,7 +107,24 @@ class Car:
         self.space.add(self.motorJoint1, self.motorJoint2)
         
     def removeCar(self):
-        self.space.remove(motorJoint1)
-        self.space.remove(motorJoint2)
-        self.space.remove(motorJoint1)
+        self.space.remove(self.chassis_b)
+        self.space.remove(self.chassis_s)
+        self.space.remove(self.wheel1_b)
+        self.space.remove(self.wheel1_s)
+        self.space.remove(self.wheel2_b)
+        self.space.remove(self.wheel2_s)
+        self.space.remove(self.pin1)
+        self.space.remove(self.pin2)
+        self.space.remove(self.pin3)
+        self.space.remove(self.pin4)
+        self.space.remove(self.motorJoint1)
+        self.space.remove(self.motorJoint2)
+
+    def updateFitness(self):
+        if self.wheel2_b.position.x > self.fitness:
+            self.fitness = self.wheel2_b.position.x
+        if self.fitness > self.maxFitness:
+            self.fitness = self.maxFitness
         
+            
+   
