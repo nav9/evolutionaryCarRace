@@ -109,7 +109,7 @@ class Scene:
                         bestFit = b.getFitness(); 
                     if b.getFitness() > self.allTimeBestFit:    
                         self.allTimeBestFit = b.getFitness(); self.allTimeBestFitGen = g
-                self.screen.blit(self.font.render("Generation: "+str(g)+"/"+str(int(self.generations))+".   Time remaining: "+str(int(self.timeToTry-total_time))+".   Best fitness now: "+str(int(bestFit))+".   All time best fitness: "+str(int(self.allTimeBestFit))+" in gen "+str(int(self.allTimeBestFitGen)), 1, THECOLORS["darkgrey"]), (5, 5))
+                self.screen.blit(self.font.render("Generation: "+str(g)+" of "+str(int(self.generations))+".   Time remaining: "+str(int(self.timeToTry-total_time))+".   Best fitness now: "+str(int(bestFit))+".   All time best fitness: "+str(int(self.allTimeBestFit))+" in gen "+str(int(self.allTimeBestFitGen)), 1, THECOLORS["darkgrey"]), (5, 5))
                 self.game.display.flip()
                 dt = self.clock.tick(self.fps)#creates a delay
                 total_time += dt/1000.
