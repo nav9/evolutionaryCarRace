@@ -63,6 +63,9 @@ class Scene:
         
         #---add tracks                
         trackPositions = []; endOfTrack = 0
+        if self.numCars < 4:
+            print("A minimum population of 4 is required for Differential Evolution")
+            return
         for y in range(self.numCars):
             trackPositions.append(self.trackY)
             self.trackY += self.trackGap
