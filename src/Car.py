@@ -1,6 +1,6 @@
-### Author: Navin Ipe
+### Author: Navin 
 ### Created: March 2019
-### License: Proprietary. No form of this shall be shared or copied in any form without the explicit permission of the author
+### License: MIT
 
 from pymunk import Vec2d
 import random
