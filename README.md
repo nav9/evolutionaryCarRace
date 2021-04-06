@@ -1,4 +1,4 @@
-[![IMAGE ALT TEXT HERE](sampleImage/sample.png)](https://www.youtube.com/watch?v=7ok4ESgrKg0)
+[![IMAGE ALT TEXT HERE](sampleImage/carDifferentialEvolution.png)](https://www.youtube.com/watch?v=7ok4ESgrKg0)
 
 # evolutionaryCarRace
 Built with PyMunk and PyGame, this program showcases the concept of Differential Evolution using cars that explore the search space of various configurations of speed, chassis size and wheel radius, to eventually exploit the search space and locate the optimal or near-optimal solution.
