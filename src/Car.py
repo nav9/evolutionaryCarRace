@@ -107,7 +107,7 @@ class Car:
         moment = self.physics.moment_for_box(self.chassisMass, (self.chWd, self.chHt))
         self.chassis_b = self.physics.Body(self.chassisMass, moment)
         self.chassis_s = self.physics.Poly.create_box(self.chassis_b, (self.chWd, self.chHt))
-        self.chassis_s.color = 10,150,40
+        self.chassis_s.color = 10,150,40,100
         self.chassis_b.position = chassisXY + (0, 0)
         self.space.add(self.chassis_b, self.chassis_s)           
         
@@ -117,7 +117,7 @@ class Car:
         self.wheel1_b = self.physics.Body(self.wheel1Mass, moment)
         self.wheel1_s = self.physics.Circle(self.wheel1_b, self.wheel1Radius)
         self.wheel1_s.friction = self.friction
-        self.wheel1_s.color = 180,180,180
+        self.wheel1_s.color = 180,180,180,100
         self.wheel1_b.position = chassisXY - (self.chWd, 0)
         self.space.add(self.wheel1_b, self.wheel1_s)          
 
@@ -127,7 +127,7 @@ class Car:
         self.wheel2_b = self.physics.Body(self.wheel2Mass, moment)
         self.wheel2_s = self.physics.Circle(self.wheel2_b, self.wheel2Radius)
         self.wheel2_s.friction = self.friction
-        self.wheel2_s.color = 180,180,180
+        self.wheel2_s.color = 180,180,180,100
         self.wheel2_b.position = chassisXY - (-self.chWd, 0)
         self.space.add(self.wheel2_b, self.wheel2_s)         
         
