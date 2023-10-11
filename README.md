@@ -8,3 +8,5 @@ The cars learn from each other's configurations. The program can perform better 
 Install PyMunk using: `pip install pymunk==6.2.1`  
 Install PyGame using: `pip install pygame==2.1.2`  
 This program used Python 3.9.6.  
+
+  [![Donate](https://raw.githubusercontent.com/nav9/VCF_contacts_merger/main/gallery/thankYouDonateButton.png)](https://nrecursions.blogspot.com/2020/08/saying-thank-you.html)  
